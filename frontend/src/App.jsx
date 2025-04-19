@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Terminal from './components/Terminal'
-import { startSession, checkServerStatus } from './api/session'
+import { startSession, checkServerStatus, checkSession } from './api/session'
 
 function App() {
   const [sessionId, setSessionId] = useState(null)
@@ -39,12 +39,23 @@ function App() {
         const existingSessionId = localStorage.getItem('webshell_session_id')
         
         if (existingSessionId) {
-          setSessionId(existingSessionId)
-          setIsLoading(false)
-          return
+          console.log('Found existing session, verifying:', existingSessionId)
+          // Verify if the session still exists on the backend
+          const isValid = await checkSession(existingSessionId)
+          
+          if (isValid) {
+            console.log('Using existing session:', existingSessionId)
+            setSessionId(existingSessionId)
+            setIsLoading(false)
+            return
+          }
+          // If not valid, continue to create a new session
+          console.log('Stored session is invalid, removing from localStorage')
+          localStorage.removeItem('webshell_session_id')
         }
         
         // Start a new session
+        console.log('Creating new session')
         const { sessionId } = await startSession()
         localStorage.setItem('webshell_session_id', sessionId)
         setSessionId(sessionId)
@@ -87,6 +98,16 @@ function App() {
               <li>Check if backend server is running on port 3001</li>
               <li>Run <code className="bg-red-700 px-1 rounded">./run-backend.sh</code> in a separate terminal</li>
               <li>Make sure Docker is installed and running</li>
+              <li>Try clearing session data: <button 
+                  onClick={() => {
+                    localStorage.removeItem('webshell_session_id'); 
+                    window.location.reload();
+                  }}
+                  className="bg-red-700 px-1 rounded hover:bg-red-600"
+                >
+                  Clear Session
+                </button>
+              </li>
             </ul>
           </div>
           <button 

@@ -232,10 +232,50 @@ const Terminal = ({ sessionId, darkMode }) => {
       xtermRef.current.writeln('  date     - Show current date/time');
       xtermRef.current.writeln('  uptime   - Show system uptime');
       xtermRef.current.writeln('  tree     - Display directory tree');
+      xtermRef.current.writeln('  ping     - Network ping utility');
+      xtermRef.current.writeln('  curl     - Transfer data from/to servers');
+      xtermRef.current.writeln('  wget     - Download files from the web');
+      xtermRef.current.writeln('  nano     - Simple text editor');
+      xtermRef.current.writeln('  vim      - Advanced text editor');
       xtermRef.current.writeln('  clear    - Clear terminal');
       xtermRef.current.writeln('  help     - Show this help');
+      xtermRef.current.writeln('  security - Show security information');
       xtermRef.current.writeln('');
-      xtermRef.current.writeln('Note: All commands are processed on the server. Backend appears to be offline.');
+      xtermRef.current.writeln('Note: Most standard Linux commands are supported except those that could pose security risks.');
+      xtermRef.current.writeln('      Commands can be piped together using |, but other forms of command chaining (&&, ||, ;) are restricted.');
+      xtermRef.current.writeln('      Type "security" for more information about security restrictions.');
+      writePrompt(xtermRef.current, currentPath);
+      return;
+    }
+    
+    if (command === 'security') {
+      xtermRef.current.writeln('WebShell Security Information');
+      xtermRef.current.writeln('---------------------------');
+      xtermRef.current.writeln('This terminal operates in a secure, sandboxed Docker container environment.');
+      xtermRef.current.writeln('');
+      xtermRef.current.writeln('Security Approach:');
+      xtermRef.current.writeln('- Most standard Linux commands are allowed');
+      xtermRef.current.writeln('- Specific dangerous commands are blacklisted');
+      xtermRef.current.writeln('- Certain commands have argument restrictions');
+      xtermRef.current.writeln('- Command pipe (|) chaining is supported');
+      xtermRef.current.writeln('- Other command chaining (&&, ||, ;) is restricted');
+      xtermRef.current.writeln('- Command substitution ($(), ``) is restricted');
+      xtermRef.current.writeln('');
+      xtermRef.current.writeln('Blacklisted Commands:');
+      xtermRef.current.writeln('- Privilege escalation: sudo, su');
+      xtermRef.current.writeln('- Package management: apt, apt-get, yum, dnf');
+      xtermRef.current.writeln('- System services: systemctl, service');
+      xtermRef.current.writeln('- Disk partitioning: mkfs, fdisk');
+      xtermRef.current.writeln('- Remote access: ssh, scp');
+      xtermRef.current.writeln('- System control: reboot, shutdown');
+      xtermRef.current.writeln('');
+      xtermRef.current.writeln('Restricted Operations:');
+      xtermRef.current.writeln('- Recursive removal of system directories');
+      xtermRef.current.writeln('- Writing to system devices');
+      xtermRef.current.writeln('- Setting dangerous permissions');
+      xtermRef.current.writeln('- Changing ownership of system files');
+      xtermRef.current.writeln('- Force killing processes');
+      xtermRef.current.writeln('- Piping downloads directly to shell');
       writePrompt(xtermRef.current, currentPath);
       return;
     }

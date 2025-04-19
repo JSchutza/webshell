@@ -1,13 +1,17 @@
 FROM alpine:latest
 
-# Update and install basic packages
+# Update and install basic packages including network utilities
 RUN apk update && apk add --no-cache \
     bash \
     coreutils \
     curl \
     tree \
     vim \
-    nano
+    nano \
+    iputils \
+    wget \
+    net-tools \
+    bind-tools
 
 # Create a non-root user
 RUN adduser -D -h /home/webuser webuser
